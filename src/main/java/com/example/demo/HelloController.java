@@ -26,5 +26,10 @@ public class HelloController {
         }
         return b.toString();
     }
+
+    @GetMapping("/intList")
+    public Integer[] IntegerList(){
+        return new Integer[] {1,2,3,4,5};
+    }
     
 }
