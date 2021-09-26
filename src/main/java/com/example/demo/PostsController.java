@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +28,12 @@ public class PostsController {
         return result;
     }
 
+    @PostMapping("/v1/posts")
+    public Post Add(@RequestBody Post newPost){
+        posts.add(new Post(newPost.getId(), newPost.getUserId(), newPost.getText()));
+        return newPost;
+    }
+    
     private ArrayList<Post> getPostsByUserId(int userId){
         ArrayList<Post> result = posts;
         if(userId != 0){
