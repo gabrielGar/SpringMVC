@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,6 +59,11 @@ public class UsersController {
         return u;
     }
 
+    @DeleteMapping("/v2/users/{id}")
+    public void Delete(@PathVariable("id") int id) throws Exception {
+        User u = findById(id);
+        users.remove(u);
+    }
 
     private UserV2 findById(int id) throws Exception {
         for (UserV2 user : users) {
