@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/langSelector.html :: head}">
+</head>
+<body th:object="${user}">
+    <div th:replace="~{fragments/langSelector.html :: body}">
+    </div>
+    <form th:action="*{id} == 0? 
+                        @{/v2/users} : 
+                        @{|/v2/users/*{id}|}" 
+        th:method="POST"
+        th:value="*{id}">
+        <p> <span th:text="#{id}"></span> <input th:field="*{id}"></p>
+        <p> <span th:text="#{name}"></span> <input th:field="*{name}"> </p>
+        <p><input type="submit" th:value="#{submit}" /></p>
+    </form>
+        
+</body>
+<script>
+    $("form").submit(function(event){
+                event.preventDefault();
+                let formDataArray = $(this).serializeArray();
+                let formAction = $(this).attr("action")
+                let formID = $(this).attr("value")
+                let formDataObject = {};
+                for (const element of formDataArray) {
+                    formDataObject[element.name] = element.value;
+                }
+                let jsonFormData = JSON.stringify(formDataObject);
+
+                $.ajax({
+                    type: formID == 0? 'POST' : 'PUT',
+                    url: formAction,
+                    data: jsonFormData,
+                    contentType: 'application/json'
+                }).done(function( data, textStatus, jqXHR ) {
+                    window.location = "/users"
+                });
+            });
+</script>
+</html>
