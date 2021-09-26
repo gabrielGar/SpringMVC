@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,5 +33,19 @@ public class UsersController {
     @GetMapping("/v2/users")
     public List<UserV2> UsersV2(){
         return users;
+    }
+
+    @GetMapping("/v2/users/{id}")
+    public User UserById(@PathVariable("id") int id) throws Exception {
+        return findById(id);
+    }
+    
+    private User findById(int id) throws Exception {
+        for (User user : users) {
+            if (user.getId() == id){
+                return user;
+            }
+        }
+        throw new ElementNotFoundException();
     }
 }
