@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,8 +49,18 @@ public class UsersController {
         return newUser;
     }
     
-    private User findById(int id) throws Exception {
-        for (User user : users) {
+    @PutMapping("/v2/users/{id}")
+    public User Update(@RequestBody UserV2 updateUser, 
+                        @PathVariable("id") int id) throws Exception {
+        UserV2 u = findById(id);
+        u.setName(updateUser.getName());
+        u.setLang(updateUser.getLang());
+        return u;
+    }
+
+
+    private UserV2 findById(int id) throws Exception {
+        for (UserV2 user : users) {
             if (user.getId() == id){
                 return user;
             }
