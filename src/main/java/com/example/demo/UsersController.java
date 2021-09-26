@@ -27,4 +27,10 @@ public class UsersController {
                     .map(u -> new User(u.getId(), u.getName()))
                     .collect(Collectors.toList());
     }
+
+    
+    @GetMapping("/v2/users")
+    public List<UserV2> UsersV2(){
+        return users;
+    }
 }
