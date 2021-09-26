@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -38,6 +40,12 @@ public class UsersController {
     @GetMapping("/v2/users/{id}")
     public User UserById(@PathVariable("id") int id) throws Exception {
         return findById(id);
+    }
+    
+    @PostMapping("/v2/users")
+    public User Add(@RequestBody UserV2 newUser){
+        users.add(new UserV2(newUser.getId(), newUser.getName(), newUser.getLang()));
+        return newUser;
     }
     
     private User findById(int id) throws Exception {
