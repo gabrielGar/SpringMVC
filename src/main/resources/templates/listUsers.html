@@ -29,8 +29,11 @@
     </div>
     <li th:each="user : ${users}"
         th:object="${user}">
-        <span th:class="*{id} % 2 != 0? 'odd': _"
+        <a th:href="@{|/users/edit/*{id}|}">
+            <span th:class="*{id} % 2 != 0? 'odd': _"
             th:text="*{name}"></span>
+        </a> 
+        - 
         <a th:href="@{/posts(userId=*{id})}">
             Posts (URL)
         </a>

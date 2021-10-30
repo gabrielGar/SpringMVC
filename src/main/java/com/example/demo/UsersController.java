@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.example.demo.User;
 import com.example.demo.UserV2;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -88,11 +87,5 @@ public class UsersController {
             }
         }
         throw new ElementNotFoundException();
-    }
-
-    // 404
-    @ResponseStatus(value=HttpStatus.NOT_FOUND, reason="No element found")  
-    public static class ElementNotFoundException extends RuntimeException {
-        
     }
 }
