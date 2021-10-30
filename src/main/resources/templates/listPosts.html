@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/langSelector.html :: head}"> 
+</head>
+<head><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
+    <script>
+        $(document).ready(function(){
+            $(".btnDelete").click(function(){
+                if (confirm("¿Desea eliminar este elemento?"))
+                {
+                    let ID = $(this).attr('extraInfo');
+                    let URL = $(this).attr('url');
+                    $.ajax({
+                        type: 'DELETE',
+                        url: URL,
+                        contentType: 'application/json'
+                    }).done(function( data, textStatus, jqXHR ) {
+                        window.location = "/posts"
+                    });
+                }
+            });
+        });  
+    </script>
+</head>
+<body>
+    <form th:action="@{/posts/new}"><input type="submit" th:value="#{new}"></form>
+    <div th:replace="~{fragments/langSelector.html :: body}">
+    </div>
+    <li th:each="post : ${posts}" 
+            th:object="${post}">
+            <a th:href="@{|/posts/edit/*{id}|}">
+                <span style="color:#000" 
+                th:text="*{text}"></span>
+            </a> 
+            <input class="btnDelete" type="submit" th:value="Eliminar" 
+                th:url="@{|/v2/posts/*{id}|}"
+                th:extraInfo="*{id}" >
+        </li>
+    </body>
+</html>

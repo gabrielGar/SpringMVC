@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/langSelector.html :: head}">
+</head>
+<body th:object="${post}">
+    <div th:replace="~{fragments/langSelector.html :: body}">
+    </div>
+    <form th:action="*{id} == 0? 
+                        @{/v2/posts} : 
+                        @{|/v2/posts/*{id}|}" 
+        th:method="POST"
+        th:value="*{id}">
+        <p> <span th:text="#{id}"></span> <input th:field="*{id}"></p>
+        <p> <span th:text="#{user}"></span> 
+            <select th:field="*{userId}">
+                <option th:each="user : ${users}" th:text="${user.name}" th:value="${user.id}"></option>
+            </select>
+        </p>
+        <p> <span th:text="#{text}"></span> <input th:field="*{text}"> </p>
+
+        <p><input type="submit" th:value="#{submit}" /></p>
+    </form>
+        
+</body>
+<script>
+    $("form").submit(function(event){
+                event.preventDefault();
+                let formDataArray = $(this).serializeArray();
+                let formAction = $(this).attr("action")
+                let formID = $(this).attr("value")
+                let formDataObject = {};
+                for (const element of formDataArray) {
+                    formDataObject[element.name] = element.value;
+                }
+                let jsonFormData = JSON.stringify(formDataObject);
+
+                $.ajax({
+                    type: formID == 0? 'POST' : 'PUT',
+                    url: formAction,
+                    data: jsonFormData,
+                    contentType: 'application/json'
+                }).done(function( data, textStatus, jqXHR ) {
+                    window.location = "/posts"
+                });
+            });
+</script>
+</html>
