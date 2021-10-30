@@ -19,6 +19,8 @@ public class PostsViewController {
         
         ModelAndView mv = new ModelAndView("listPosts");
         mv.addObject("posts", result);
+        mv.addObject("users", UsersController.users);
+        mv.addObject("userId", userId);
         return mv;
     }
     

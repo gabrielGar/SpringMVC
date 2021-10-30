@@ -1,10 +1,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{fragments/langSelector.html :: head}"> 
+<head th:insert="~{fragments/commonHeader.html :: head}"> 
 </head>
-<head><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link th:href="@{/css/main.css}" rel="stylesheet" />
+<header th:insert="~{fragments/commonHeader.html :: header}"> 
+</header>
+<head>
     <script>
         $(document).ready(function(){
+            $(".btnModify").click(function(){
+                let URL = $(this).attr('url');
+                window.location = URL;
+            });
             $(".btnDelete").click(function(){
                 if (confirm("¿Desea eliminar este elemento?"))
                 {
@@ -23,18 +28,39 @@
     </script>
 </head>
 <body>
-    <form th:action="@{/posts/new}"><input type="submit" th:value="#{new}"></form>
-    <div th:replace="~{fragments/langSelector.html :: body}">
-    </div>
-    <li th:each="post : ${posts}" 
-            th:object="${post}">
-            <a th:href="@{|/posts/edit/*{id}|}">
-                <span style="color:#000" 
-                th:text="*{text}"></span>
-            </a> 
-            <input class="btnDelete" type="submit" th:value="Eliminar" 
-                th:url="@{|/v2/posts/*{id}|}"
-                th:extraInfo="*{id}" >
+    <p style="margin: 20px;"> <span th:text="#{user}"></span> 
+        <select id="user" name="user"
+            th:onchange="'window.location.href = \'' + @{/posts} + '?userId=\' + this.value ' "
+        >
+            <option th:text="#{all}" th:value="0"
+                    th:selected="0 == ${userId}">
+            </option>
+            <option th:each="user : ${users}" th:text="${user.name}" th:value="${user.id}"
+                    th:selected="${user.id} == ${userId}">
+            </option>
+        </select>
+    </p>
+    <ul th:class="list-group">
+        <li th:each="post : ${posts}" 
+            th:object="${post}"
+            th:class="list-group-item">
+            <span th:text="*{text}"
+            style="display:inline-block;width:50%"></span>
+            <input class="btn btnModify" type="submit" th:value="Editar" 
+                        style="color: white; background-color: orange;"
+                        th:url="@{|/posts/edit/*{id}|}"
+                        th:extraInfo="*{id}" >
+                <input class="btn btnDelete" type="submit" th:value="Eliminar" 
+                        style="color: white; background-color: red;"
+                        th:url="@{|/v2/posts/*{id}|}"
+                        th:extraInfo="*{id}" >
+                
         </li>
+        <li th:class="list-group-item">
+            <form th:action="@{/posts/new}">
+                <input type="submit" th:value="#{new}" class="btn btn-primary">
+            </form>
+        </li>
+    </ul>
     </body>
 </html>

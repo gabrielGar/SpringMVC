@@ -1,23 +1,38 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{fragments/langSelector.html :: head}">
+<head th:insert="~{fragments/commonHeader.html :: head}">
 </head>
+<header th:insert="~{fragments/commonHeader.html :: header}">
+</header>
 <body th:object="${post}">
-    <div th:replace="~{fragments/langSelector.html :: body}">
-    </div>
     <form th:action="*{id} == 0? 
                         @{/v2/posts} : 
                         @{|/v2/posts/*{id}|}" 
         th:method="POST"
-        th:value="*{id}">
-        <p> <span th:text="#{id}"></span> <input th:field="*{id}"></p>
-        <p> <span th:text="#{user}"></span> 
-            <select th:field="*{userId}">
-                <option th:each="user : ${users}" th:text="${user.name}" th:value="${user.id}"></option>
-            </select>
+        th:value="*{id}"
+        style="padding:5% 15%">
+        <div class="form-group">
+            <p>
+            <label for="id" th:text="#{id}"></label> 
+            <input id="id" class="form-control" th:field="*{id}" />
+            </p>
+        </div>
+        <div  class="form-group">
+            <p>
+            <label for="userId" th:text="#{user}"></label> 
+                <select id="userId" class="form-control" th:field="*{userId}">
+                    <option th:each="user : ${users}" th:text="${user.name}" th:value="${user.id}"></option>
+                </select>
+            </p>
+        </div>
+        <div class="form-group">
+        <p>
+            <label for="text" th:text="#{text}"></label> 
+            <input id="text" class="form-control" th:field="*{text}">
         </p>
-        <p> <span th:text="#{text}"></span> <input th:field="*{text}"> </p>
-
-        <p><input type="submit" th:value="#{submit}" /></p>
+        </div>  
+        <div class="form-group">
+        <p><input type="submit" style="margin-top: 50px" class="btn btn-primary" th:value="#{submit}" /></p>
+        </div>
     </form>
         
 </body>

@@ -1,17 +1,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="~{fragments/langSelector.html :: head}">
+<head th:insert="~{fragments/commonHeader.html :: head}">
 </head>
+<header th:insert="~{fragments/commonHeader.html :: header}">
+</header>
 <body th:object="${user}">
-    <div th:replace="~{fragments/langSelector.html :: body}">
-    </div>
     <form th:action="*{id} == 0? 
                         @{/v2/users} : 
                         @{|/v2/users/*{id}|}" 
         th:method="POST"
-        th:value="*{id}">
-        <p> <span th:text="#{id}"></span> <input th:field="*{id}"></p>
-        <p> <span th:text="#{name}"></span> <input th:field="*{name}"> </p>
-        <p><input type="submit" th:value="#{submit}" /></p>
+        th:value="*{id}"
+        style="padding:5% 15%">
+        <div class="form-group">
+        <p>
+            <label for="id" th:text="#{id}"></label> 
+            <input id="id" class="form-control" th:field="*{id}">
+        </p>
+        </div>
+        <div class="form-group">
+        <p>
+            <label for="name" th:text="#{name}"></label>
+            <input id="name" class="form-control" th:field="*{name}">
+        </p>
+        </div>
+        <div class="form-group">
+            <p><input type="submit" style="margin-top: 50px" class="btn btn-primary" th:value="#{submit}" /></p>
+        </div>
     </form>
         
 </body>
