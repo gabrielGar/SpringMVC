@@ -1,5 +1,8 @@
 package com.sanvalero.orms.Web.View;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.sanvalero.orms.Services.PostsService;
 import com.sanvalero.orms.Services.UsersService;
 import com.sanvalero.orms.Services.Models.PostDTO;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -22,9 +26,24 @@ public class PostsViewController {
     }
 
     @GetMapping
-    public ModelAndView GetPosts(){
+    public ModelAndView GetPosts(@RequestParam(
+                                name="userId", 
+                                required=false) Long userId,
+                                @RequestParam(
+                                name="salary", 
+                                required=false) Long salary){
         ModelAndView mv = new ModelAndView("listPosts");
-        mv.addObject("posts", postsService.getAll());
+        List<PostDTO> posts;
+        if (userId != null && userId != 0){
+            posts = postsService.getAllByUserId(userId);
+        }
+        else if (salary != null){
+            posts = postsService.getAllBySalaryHigherThan(salary);
+        }
+        else{
+            posts = postsService.getAll();
+        }
+        mv.addObject("posts", posts);
         return mv;
     }
 

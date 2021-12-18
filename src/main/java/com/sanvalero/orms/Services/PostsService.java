@@ -49,5 +49,21 @@ public class PostsService {
         else 
             return Optional.empty();
     }
+    
+    public List<PostDTO> getAllByUserId(Long userId){
+        return postsRepository.getAllByUserId(userId).stream()
+                .map(x -> modelMapper.map(x, PostDTO.class))
+                .collect(Collectors.toList());
+    }
+    
+    public List<PostDTO> getAllBySalaryHigherThan(Long salary){
+        return postsRepository.getAllBySalaryHigherThan(salary).stream()
+                .map(x -> new PostDTO(
+                            modelMapper.map((PostEntity)x[1], PostDTO.class), 
+                            (String)x[0]
+                        )
+                    )
+                .collect(Collectors.toList());
+    }
 
 }

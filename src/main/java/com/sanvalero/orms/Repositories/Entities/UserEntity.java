@@ -10,12 +10,15 @@ import javax.persistence.Table;
 public class UserEntity {
     public UserEntity(){}
 
-    public UserEntity(String name){
+    public UserEntity(String name, 
+                    Long annualSalary){
         this.name = name;
+        this.salary = annualSalary;
     }
 
     private @Id @GeneratedValue Long id;
     private String name;
+    private Long salary;
     public Long getId() {
         return id;
     }
@@ -27,6 +30,12 @@ public class UserEntity {
     }
     public void setName(String name) {
         this.name = name;
+    }
+    public Long getSalary() {
+        return salary;
+    }
+    public void setSalary(Long salary) {
+        this.salary = salary;
     }
 
     

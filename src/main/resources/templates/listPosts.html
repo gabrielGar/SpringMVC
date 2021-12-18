@@ -28,6 +28,8 @@
     </div>
     <li th:each="post : ${posts}" 
             th:object="${post}">
+            <span style="color:#000" 
+                th:text="*{userName}"></span>
             <a th:href="@{|/posts/edit/*{id}|}">
                 <span style="color:#000" 
                 th:text="*{text}"></span>
