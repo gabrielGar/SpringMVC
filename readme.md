@@ -1,18 +1,18 @@
-# Ejercicio 6
+# Ejercicio 7
 
-En este ejercicio vamos a modificar nuestro proyecto para que la base de datos utilizada no sea la H2 que se almacena en memoria, si no que sea un servidor SQL Server.
+En este ejercicio vamos a añadir un certificado a nuestra aplicación, y a configurarla de forma que lo utilice para poder realizar una comunicación HTTPS. Una vez configurado, incluso vamos a eliminar la posibilidad de realizar la comunicación via HTTP (de forma que únicamente se podrá enviar y recibir información de forma segura).
 
-Puede usarse cualquier instancia de SQL de que dispongas (tanto instaladas en tu equipo, como externas, como dockerizadas).
+Para esto, puedes usar cualquiera de los certificados descritos a lo largo de la unidad 4. Sin pérdida de generalidad, y para que todos podamos hacer el mismo ejemplo, vamos a hacer el ejemplo sobre un certificado autofirmado, ya que no tiene requisitos previos.
 
-Los pasos que deberás de seguir serán los siguientes (si ya tienes disponible una instancia de SQL podrás ahorrarte algunos):
+Para esto, puedes usar tanto *KeyTool* (https://docs.oracle.com/javase/6/docs/technotes/tools/solaris/keytool.html ) como *OpenSSL* (https://www.openssl.org/) para generar una de las 2 opciones de certificado siguientes: 
+- *JKS*, que es un formato únicamente reconocido para Java
+- *PKCS12*, que es un formato estandar para cualquier tipo de aplicación
 
-- Descargar e instalar *SQL Express*: https://www.microsoft.com/es-es/sql-server/sql-server-downloads ; una vez instalado, guardate el nombre de la *instancia* y la *cadena de conexión*, puesto que será la que usemos más adelante para conectarnos a dicha base de datos.
-- Descargar e instalar *Sql Server Management Studio (SSMS)*  https://docs.microsoft.com/es-es/sql/ssms/download-sql-server-management-studio-ssms?redirectedfrom=MSDN&view=sql-server-ver15 : una vez instalado, podremos conectar directamente con la instancia de *SQL Express* instalada en el punto anterior (si has utilizado la instalación por defecto, esto supondrá conectar a *localhost\SQLEXPRESS*, y puedes hacerlo directamente con el tipo de autenticación *Windows Authentication*)
-- Modificar las *entidades de seguridad* (usuarios) para tener unas credenciales de acceso; por ejemplo, modificar el usuario sa y ponerle una contraseña con la que puedas acceder (Botón derecho sobre el usuario - Properties - Password y Confirm Password, así como deshabilitar la opción *Enforce password policy* )
-- Comprobar que con este usuario se puede acceder a la base de datos a través de SSMS. Si no se permite, posiblemente es porque el usuario está deshabilitado (habilítalo en sus propiedades en la sección de Status), y/o porque la instancia de base de datos esté configurada para permitir únicamente el acceso a través de *Windows Authentication*, y no con SQL. Para modificar esto, botón derecho sobre la instancia de SQL (el nodo principal), Properties, y en la pestaña de Security, modificar la opción de *Windows Authentication* a *Sql Server and Windows Authentication*. A continuación, reinicia el servicio de SQLExpress (Botón derecho en la instancia, *Reiniciar*). Tras esto, comprueba que efectivamente puedes acceder con el usuario.
-- Revisa también, a través de *Sql Server Configuration Manager*, que tengas lanzados tanto los servicios que permiten exponer los puertos de SQL (*Sql Server Browser*), y que tengas habilitados los puertos TCP/IP en la sección *SQL Server Network Configuration*. Si sigue sin funcionar, modifica también, en esta misma sección de *Protocolos TCP/IP*, en la pestaña de *IP Addresses*, en el apartado de *IP All*, que el puerto TCP sea el 1433.
-- Recuerda que tendrás que crear la base de datos sobre la que quieras trabajar.
-- Realiza las modificaciones en el código para usar esta instancia y este usuario; puedes usar el siguiente tutorial para fijarte en las modificaciones necesarias, y luego adaptarlo a tus propios datos: https://springframework.guru/configuring-spring-boot-for-microsoft-sql-server/ . Investiga también qué significan las opciones que se añaden en la configuración, y qué permiten hacer.
+La instrucción a ejecutar mediante KeyTool y los pasos que deberás de seguir para la generación se encuentran en las imágenes del repositorio *HowToJKS* y *HowToPKCS12*. Básicamente, en ambos casos implica la ejecución de keytool donde le informamos del alias a utilizar, el tipo de clave y su tamaño (RSA 2048), el tipo de clave y dónde guardarla (aquí es donde ambas opciones difieren), y la validez en días (10 años).
+
+Una vez introducido esto, deberemos añadir también la información correspondiente a la organización y nombre del certificado (de forma que será quien está verificando que ese certificado es válido).
+
+Una vez creados estos certificados, investiga qué opciones pueden añadirse en nuestro *application.properties* para permitir elegir y usar una clave específica de nuestro ordenador.
 
 
-El resultado final es que tu aplicación debería funciona de igual modo que lo hacía cuando trabajabas sobre la base de datos en memoria, pero verás que los resultados persisten en tu base de datos SQL.
+El resultado final es que tu aplicación debería funcionar a través de HTTPS, y no funcionar a través de HTTP.
