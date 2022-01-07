@@ -11,13 +11,19 @@ public class UserEntity {
     public UserEntity(){}
 
     public UserEntity(String name, 
-                    Long annualSalary){
+                    Long annualSalary,
+                    String username,
+                    String password){
         this.name = name;
         this.salary = annualSalary;
+        this.username = username;
+        this.password = password;
     }
 
     private @Id @GeneratedValue Long id;
     private String name;
+    private String username;
+    private String password;
     private Long salary;
     public Long getId() {
         return id;
@@ -30,6 +36,18 @@ public class UserEntity {
     }
     public void setName(String name) {
         this.name = name;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
     public Long getSalary() {
         return salary;
