@@ -11,7 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
 import static com.sanvalero.orms.Web.Config.SecurityConfig.*;
 
 import com.sanvalero.orms.Services.UsersService;
@@ -29,10 +33,12 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().authorizeRequests()
-                .antMatchers(HttpMethod.POST, SIGN_IN_URL).permitAll()
+        http.cors()
+            .and()
+            .authorizeRequests()
+                .antMatchers(HttpMethod.GET, SIGN_IN_URL_WEB).permitAll()
                 .anyRequest().authenticated()
-                .and()
+            .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()))
                 // this disables session creation on Spring Security

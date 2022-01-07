@@ -41,4 +41,10 @@ public class UsersViewController {
         mv.addObject("user", user);
         return mv;
     }
+
+    @GetMapping("/login")
+    public ModelAndView Login(){
+        ModelAndView mv = new ModelAndView("login");
+        return mv;
+    }
 }

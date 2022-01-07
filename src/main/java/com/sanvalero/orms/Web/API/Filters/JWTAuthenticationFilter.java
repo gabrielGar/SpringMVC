@@ -28,20 +28,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
 
-        setFilterProcessesUrl(SIGN_IN_URL); 
+        setFilterProcessesUrl(SIGN_IN_URL_API); 
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
-        try {
-            CredentialsDTO creds = new ObjectMapper().readValue(req.getInputStream(), CredentialsDTO.class);
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
 
-            return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(creds.getUsername(),creds.getPassword(),new ArrayList<>())
-            );
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username,password,new ArrayList<>()));
     }
 
     @Override
@@ -50,7 +46,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String token = JWT.create()
                 .withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME_IN_MILLIS))
-                .sign(Algorithm.HMAC512(SECRET.getBytes()));
+                .sign(Algorithm.HMAC512(JWT_SECRET.getBytes()));
 
         String body = ((User) auth.getPrincipal()).getUsername() + " " + token;
 

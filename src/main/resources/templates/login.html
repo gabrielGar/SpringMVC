@@ -1,0 +1,38 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+        </script>
+    </head>
+  <body>
+    <form th:action="@{/api/users/login}" method="get">
+      <label for="username">Username</label>:
+      <input type="text" id="username" name="username" autofocus="autofocus" /> <br />
+      <label for="password">Password</label>:
+      <input type="password" id="password" name="password" /> <br />
+      <input type="submit" value="Log in" />
+    </form>
+  </body>
+  <script>
+      $("form").submit(function(event){
+                event.preventDefault();
+                let formDataArray = $(this).serializeArray();
+                let formAction = $(this).attr("action")
+                let formDataObject = [];
+                for (const element of formDataArray) {
+                    formDataObject.push( element.name + "=" + element.value);
+                }
+                let jsonFormData = formDataObject.join('&');
+
+                $.ajax({
+                    type: 'GET',
+                    url: formAction,
+                    data: jsonFormData,
+                    contentType: 'application/json'
+                }).done(function( data, textStatus, jqXHR ) {
+                    var token = data.split(' ')[1];
+                    document.cookie = "jwt_cookie="+ token + "; path=/;";
+                    window.location = "/posts"
+                });
+            });
+  </script>
+</html>
